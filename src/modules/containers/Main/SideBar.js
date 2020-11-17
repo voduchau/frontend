@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Menu, Switch } from 'antd';
 import {
     MenuUnfoldOutlined,
-    MenuFoldOutlined,
+    BulbOutlined,
     UserOutlined,
     VideoCameraOutlined,
     UploadOutlined,
@@ -14,12 +14,12 @@ const { Header, Sider, Content } = Layout;
 const SideBar = (props) => {
 
     return (
-        <Sider theme={props.theme} trigger={null} collapsible collapsed={props.collapsed}>
+        <Sider theme={props.theme} className="antd-sider-container" trigger={null} collapsible collapsed={props.collapsed}>
             <div className="logo-sidebar">
                 <img src={logo} alt="logo-sider" />
                 {/* {!props.collapsed ? <span>Admin - Dashboard</span> : ""} */}
             </div>
-            <Menu theme={props.theme} mode="inline" defaultSelectedKeys={['1']}>
+            <Menu className="ant-menu-sider" theme={props.theme} mode="inline" defaultSelectedKeys={['1']}>
                 <Menu.Item key="1" icon={<UserOutlined />}>
                     User
                     </Menu.Item>
@@ -30,18 +30,20 @@ const SideBar = (props) => {
                     Upload
                     </Menu.Item>
                 <Menu.SubMenu key="sub1" title="Location">
-                    <Menu.Item key="4">Option 7</Menu.Item>
-                    <Menu.Item key="5">Option 8</Menu.Item>
+                    <Menu.Item key="4">Quận 1</Menu.Item>
+                    <Menu.Item key="5">Quận 2</Menu.Item>
                 </Menu.SubMenu>
-                <div className="swithTheme">
-                    <Switch
-                        checked={props.theme === 'dark'}
-                        onChange={props.changeTheme}
-                        checkedChildren="Dark"
-                        unCheckedChildren="Light"
-                    />
-                </div>
             </Menu>
+            <div className="swithTheme">
+                <BulbOutlined />
+                <span>Swith theme</span>
+                <Switch
+                    checked={props.theme === 'dark'}
+                    onChange={props.changeTheme}
+                    checkedChildren="Dark"
+                    unCheckedChildren="Light"
+                />
+            </div>
         </Sider>
     );
 }
