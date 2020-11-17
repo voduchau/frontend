@@ -109,3 +109,9 @@
 .menu-right-language .ant-menu-submenu-selected {
     border: none !important;
 }
+.menu-right-user {
+  border: none
+}
+.menu-right-user .ant-menu-submenu {
+  border: none !important;
+}

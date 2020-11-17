@@ -8,14 +8,26 @@ import Header from './Header';
 import "antd/dist/antd.css";
 import './index.css'
 import Footer from './Footer'
-
+import { useMedia } from 'react-media';
 const { Sider, Content } = Layout;
+
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+const GLOBAL_MEDIA_QUERIES = {
+    small: "(max-width: 599px)",
+    medium: "(min-width: 600px) and (max-width: 1199px)",
+    large: "(min-width: 1200px)"
+};
+
 const App = (props) => {
     const [collapsed, setCollapsed] = useState(false)
     const [theme, setTheme] = useState("light")
     const [loading, setLoading] = useState(true)
+    const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
 
+    useEffect(() => {
+        console.log(matches,'matches')
+    },[matches])
     const toggle = () => {
         setCollapsed(!collapsed);
     };
@@ -33,9 +45,20 @@ const App = (props) => {
     return (
         <Layout>
             <Spin spinning={loading} indicator={antIcon}>
-                <SideBar theme={theme} changeTheme={changeTheme} collapsed={collapsed} />
+                <SideBar 
+                    matches={matches} 
+                    toggle={toggle} 
+                    theme={theme} 
+                    setCollapsed={setCollapsed} 
+                    changeTheme={changeTheme} 
+                    collapsed={collapsed} 
+                />
                 <Layout className="site-layout ant-layout-container">
-                    <Header collapsed={collapsed} toggle={toggle} />
+                    <Header 
+                        matches={matches} 
+                        collapsed={collapsed} 
+                        // toggle={toggle} 
+                    />
                     <Content
                         className="site-layout-background"
                         style={{
