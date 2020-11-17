@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined, LockOutlined, message } from '@ant-design/icons';
 import { Form, Input, Button, Radio, Row, Col, Checkbox } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
 import { login_pending, login_success, login_error } from '@actions/auth';
@@ -8,7 +8,7 @@ import "antd/dist/antd.css";
 import './index.css'
 import logo from '../../../assets/images/logo.png'
 
-const Login = () => {
+const Login = (props) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
 
@@ -23,8 +23,13 @@ const Login = () => {
             username: values.username,
             password: values.password,
         }).then(res => {
+            setLoading(false)
             dispatch(login_success(res.data))
+            props.history.replace('/home');
+            message.success('Welcome ' + res.user.email);
+
         }).catch(err => {
+            setLoading(false)
             dispatch(login_error("login failed"))
         })
 
@@ -84,7 +89,7 @@ const Login = () => {
                     <Button
                         type="primary"
                         htmlType="submit"
-                    // loading={}
+                        loading={loading}
                     >
                         Log in
                     </Button>

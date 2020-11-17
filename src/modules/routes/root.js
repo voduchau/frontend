@@ -8,7 +8,7 @@ import rootReducer from "../../reducers";
 // import { SnackbarProvider } from "notistack";
 import Login from "@containers/Login";
 // import Maintenance from "@containers/Main/Maintenance";
-// import Layout from "@containers/Main";
+import Layout from "@containers/Main";
 
 let store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 // getTimeOutToRefreshToken();
@@ -20,7 +20,7 @@ function root() {
                     <Switch>
                         <Route path="/login" component={authHOC(Login)} />
                         {/* <Route path="/maintenance" component={Maintenance} /> */}
-                        {/* <Route path="/" component={authHOC(Layout)} /> */}
+                        <Route path="/" component={authHOC(Layout)} />
                     </Switch>
                 </BrowserRouter>
         </Provider>
