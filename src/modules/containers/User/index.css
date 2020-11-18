@@ -7,3 +7,21 @@
     align-items: center;
     margin-bottom: 15px;
 }
+.user-content .user-action {
+    display: flex;
+    justify-content: space-around;
+}
+.button-delete {
+    color: "red" !important;
+}
+.input-search-user .ant-input-affix-wrapper {
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+}
+.input-search-user .ant-input-search-button {
+    border-radius: 0 8px 8px 0 !important;
+    height: 40px;
+}
+.input-search-user .ant-input {
+    height: 30px;
+}
