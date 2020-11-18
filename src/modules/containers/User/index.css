@@ -1,0 +1,9 @@
+.table-user-container .ant-spin-container {
+    flex-direction: column;
+}
+.user-content .user-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}

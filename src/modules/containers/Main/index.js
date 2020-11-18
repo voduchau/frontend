@@ -3,12 +3,14 @@ import { Layout, Spin } from 'antd';
 import {
     LoadingOutlined
 } from '@ant-design/icons';
+import { childRoutes } from "@modules/routes";
 import SideBar from './SideBar';
 import Header from './Header';
 import "antd/dist/antd.css";
 import './index.css'
 import Footer from './Footer'
 import { useMedia } from 'react-media';
+import { Route } from "react-router-dom";
 const { Sider, Content } = Layout;
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -25,9 +27,6 @@ const App = (props) => {
     const [loading, setLoading] = useState(true)
     const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
 
-    useEffect(() => {
-        console.log(matches,'matches')
-    },[matches])
     const toggle = () => {
         setCollapsed(!collapsed);
     };
@@ -57,7 +56,8 @@ const App = (props) => {
                     <Header 
                         matches={matches} 
                         collapsed={collapsed} 
-                        // toggle={toggle} 
+                        toggle={toggle}
+                        {...props}
                     />
                     <Content
                         className="site-layout-background"
@@ -67,7 +67,16 @@ const App = (props) => {
                             minHeight: 280,
                         }}
                     >
-                        Content
+                        <div style={{ minHeight: 360 }}>
+                            {childRoutes.map((route, index) => (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    component={route.component}
+                                    exact={route.exactly}
+                                />
+                            ))}
+                        </div>
                 </Content>
                     <Footer />
                 </Layout>

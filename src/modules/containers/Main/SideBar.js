@@ -7,6 +7,7 @@ import {
     VideoCameraOutlined,
     UploadOutlined,
 } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 import logo from '../../../assets/images/logo.png';
 
 const { Header, Sider, Content } = Layout;
@@ -40,13 +41,20 @@ const SideBar = (props) => {
                 <img src={logo} alt="logo-sider" />
             </div>
             <Menu className="ant-menu-sider" theme={theme} mode="inline" defaultSelectedKeys={['1']}>
-                <Menu.Item key="1" icon={<UserOutlined />}>
-                    User
+            <Menu.Item key="1" icon={<UserOutlined />}>
+                    <Link to="/home">
+                        Home
+                    </Link>
                 </Menu.Item>
-                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                <Menu.Item key="2" icon={<UserOutlined />}>
+                    <Link to="/user">
+                        User
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="3" icon={<VideoCameraOutlined />}>
                     Player
                 </Menu.Item>
-                <Menu.Item key="3" icon={<UploadOutlined />}>
+                <Menu.Item key="4" icon={<UploadOutlined />}>
                     Upload
                 </Menu.Item>
                 <Menu.SubMenu key="sub1" title="Location">

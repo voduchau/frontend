@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined, LockOutlined, message } from '@ant-design/icons';
-import { Form, Input, Button, Radio, Row, Col, Checkbox } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Radio, Row, Col, Checkbox, message } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
 import { login_pending, login_success, login_error } from '@actions/auth';
 import api from "@api"
@@ -11,7 +11,7 @@ import logo from '../../../assets/images/logo.png'
 const Login = (props) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-
+    const { loggingIn, loggingOut, loginErrors } = useSelector(state => state.auth)
     const dispatch = useDispatch()
 
 
@@ -23,14 +23,24 @@ const Login = (props) => {
             username: values.username,
             password: values.password,
         }).then(res => {
-            setLoading(false)
-            dispatch(login_success(res.data))
-            props.history.replace('/home');
-            message.success('Welcome ' + res.user.email);
-
+            if (res.status === 200) {
+                setLoading(false)
+                dispatch(login_success(res.data))
+                props.history.replace('/home');
+                message.success('Welcome ' + res.data.username);
+            }
         }).catch(err => {
-            setLoading(false)
-            dispatch(login_error("login failed"))
+            if (err) {
+                setLoading(false)
+                dispatch(login_error("login failed"))
+                message.error({
+                    content: 'Login failed',
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '15vh',
+                    },
+                });
+            }
         })
 
         form.validateFields().then(value => {

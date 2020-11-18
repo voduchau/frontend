@@ -24,7 +24,7 @@ import {
         return {
           ...state,
           loggingIn: false,
-          loginErrors: action.payload.message
+          loginErrors: action.payload.response
         };
       case LOGOUT:
         window.localStorage.removeItem('token');
@@ -38,4 +38,4 @@ import {
     }
   }
   
-  export default auth
+  export default auth;
