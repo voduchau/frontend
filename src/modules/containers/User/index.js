@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Input, Button, Tooltip, Popconfirm, message } from 'antd';
+import api from '@api';
 import {
     PlusOutlined,
     DeleteTwoTone,
@@ -11,35 +12,38 @@ import './index.css';
 const { Search } = Input;
 const { Column, ColumnGroup } = Table;
 
-const data = [
-    {
-        key: '1',
-        name: 'Joe',
-        phone: "0941010197",
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-    },
-    {
-        key: '2',
-        name: 'Jim',
-        phone: "0968321456",
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-    },
-    {
-        key: '3',
-        name: 'Joe',
-        phone: "0963412569",
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-    },
-];
+// const data = [
+//     {
+//         key: '1',
+//         name: 'Joe',
+//         phone: "0941010197",
+//         age: 32,
+//         address: 'New York No. 1 Lake Park',
+//         tags: ['nice', 'developer'],
+//     },
+//     {
+//         key: '2',
+//         name: 'Jim',
+//         phone: "0968321456",
+//         age: 42,
+//         address: 'London No. 1 Lake Park',
+//         tags: ['loser'],
+//     },
+//     {
+//         key: '3',
+//         name: 'Joe',
+//         phone: "0963412569",
+//         age: 32,
+//         address: 'Sidney No. 1 Lake Park',
+//         tags: ['cool', 'teacher'],
+//     },
+// ];
 
 
 const User = () => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false)
+
     const columns = [
         {
             title: 'Name',
@@ -119,12 +123,36 @@ const User = () => {
             ),
         }
     ];
+
+    useEffect(()=>{
+        fetchData()
+    },[])
+
+    const fetchData = () => {
+        console.log('fetch')
+        setLoading(true)
+        api.get('/users').then((res) => {
+            setData(res.data)
+            setLoading(false)
+        })
+    }
+
+    const handleAddUser = () => {
+        api.get('/users', {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        }).then((response) => {
+            console.log(response,'response')
+        })
+    }
+
     const onChangeTable = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
     }
+
     const onSearch = e => {
         console.log(e);
     };
+
     const confirm = (e) => {
         console.log(e);
         message.success('Click on Yes');
@@ -145,7 +173,7 @@ const User = () => {
                     onSearch={onSearch}
                     style={{ width: 200 }}
                 />
-                <Button type="primary" size="medium">
+                <Button type="primary" size="medium" onClick={handleAddUser}>
                     Thêm mới
                 </Button>
             </div>
@@ -153,6 +181,7 @@ const User = () => {
                 bordered
                 dataSource={data}
                 columns={columns}
+                loading={loading}
                 dataSource={data}
                 onChange={onChangeTable}
                 className="table-user-container"

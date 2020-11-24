@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 // import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Root from "./modules/routes/root";
+import './languages/i18n';
 
 ReactDOM.render(
   <>

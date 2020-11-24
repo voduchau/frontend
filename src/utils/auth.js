@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, useRef } from "react";
 import { withRouter } from "react-router-dom";
 import axios from "@api";
 // import { toJson } from "@utils/json";
@@ -58,14 +58,16 @@ const validate = function (history) {
 // }
 
 const authHoc = (BaseComponent) => {
+    const checkAuthentication = (params) => {
+        const { history } = params;
+        validate(history);
+    }
     const Restricted = (props) => {
-        useEffect(()=>{
+        const willMount = useRef(true)
+        if (willMount.current) {
             checkAuthentication(props)
-        },[])
-        const checkAuthentication = (params) => {
-            const { history } = params;
-            validate(history);
         }
+        willMount.current = false
         return <BaseComponent {...props} />
     }
     return withRouter(Restricted);

@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Radio, Row, Col, Checkbox, message } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
 import { login_pending, login_success, login_error } from '@actions/auth';
+import { useTranslation } from 'react-i18next';
 import api from "@api"
 import "antd/dist/antd.css";
 import './index.css'
 import logo from '../../../assets/images/logo.png'
 
 const Login = (props) => {
+    const { t, i18n } = useTranslation();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const { loggingIn, loggingOut, loginErrors } = useSelector(state => state.auth)
@@ -27,7 +29,7 @@ const Login = (props) => {
                 setLoading(false)
                 dispatch(login_success(res.data))
                 props.history.replace('/home');
-                message.success('Welcome ' + res.data.username);
+                message.success( t("welcome") + " " + res.data.username);
             }
         }).catch(err => {
             if (err) {
@@ -92,7 +94,7 @@ const Login = (props) => {
                     </Form.Item>
 
                     <a className="login-form-forgot" href="">
-                        Forgot password
+                        {t("forgot_password")} ?
                     </a>
                 </Form.Item>
                 <Row>
@@ -101,7 +103,7 @@ const Login = (props) => {
                         htmlType="submit"
                         loading={loading}
                     >
-                        Log in
+                        {t("login")}
                     </Button>
                 </Row>
             </Form>

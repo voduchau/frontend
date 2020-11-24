@@ -24,7 +24,7 @@ const GLOBAL_MEDIA_QUERIES = {
 const App = (props) => {
     const [collapsed, setCollapsed] = useState(false)
     const [theme, setTheme] = useState("light")
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
 
     const toggle = () => {
@@ -32,9 +32,9 @@ const App = (props) => {
     };
 
     useEffect(() => {
-        setTimeout(()=>{
-            setLoading(false)
-        }, 1500)
+        // setTimeout(()=>{
+        //     setLoading(false)
+        // }, 1500)
     },[])
 
     const changeTheme = () => {

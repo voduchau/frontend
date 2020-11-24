@@ -11,14 +11,29 @@ import { Badge } from 'antd';
 import us from '../../../assets/images/us.png'
 import vietnam from '../../../assets/images/vietnam.png'
 import korea from '../../../assets/images/korea.png'
+import { useTranslation } from 'react-i18next';
 
 const { SubMenu } = Menu;
 
+const DataLanguage = [
+    { name: "Việt Nam", src: vietnam, key: "vi" },
+    { name: "English", src: us, key: "en" }
+]
+
 const Header = (props) => {
-    const [currentLanguage, setCurrentLanguage] = useState("option1");
+    const { t, i18n } = useTranslation();
+    const [currentLanguage, setCurrentLanguage] = useState("vi");
+    const [currentLanguageSrc, setCurrentLanguageSrc] = useState(vietnam)
 
     const handleChangeLanguage = (e) => {
-        setCurrentLanguage(e.key)
+        setCurrentLanguage(e.key);
+        i18n.changeLanguage(e.key);
+        if (e.key == "en") {
+            setCurrentLanguageSrc(us)
+        }
+        else {
+            setCurrentLanguageSrc(vietnam)
+        }
     }
     const handleClickMenu = e => { }
 
@@ -38,18 +53,18 @@ const Header = (props) => {
             <SubMenu title={
                 <>
                     <span style={{ color: '#999', marginRight: 4 }}>
-                        Hi,
-                                </span>
+                        {t("hi")},
+                    </span>
                     <span>hunghaubmt</span>
                     <Avatar style={{ marginLeft: 8 }} src={avatar} />
                 </>
             }
             >
                 <Menu.Item key="SignOut">
-                    <a onClick={handleSignOut}>Sign out</a>
+                    <a onClick={handleSignOut}>{t("sign_out")}</a>
                 </Menu.Item>
                 <Menu.Item key="Setting">
-                    Setting
+                    {t("setting")}
                 </Menu.Item>
             </SubMenu>
         </Menu>
@@ -63,15 +78,15 @@ const Header = (props) => {
             key="language"
             mode="horizontal"
         >
-            <SubMenu key="SubMenu" title={<Avatar src={us} size="small" />}>
-                <Menu.Item key="option1">
-                    <Avatar src={vietnam} style={{ marginRight: 8 }} />
-                        Viet Nam
-                </Menu.Item>
-                <Menu.Item key="option2">
-                    <Avatar src={korea} style={{ marginRight: 8 }} />
-                         Korea
-                </Menu.Item>
+            <SubMenu key="SubMenu" title={<Avatar src={currentLanguageSrc} size="small" />}>
+                {
+                    DataLanguage.map((item, index) => (
+                        <Menu.Item key={item.key}>
+                            <Avatar src={item.src} style={{ marginRight: 8 }} />
+                            {item.name}
+                        </Menu.Item>
+                    ))
+                }
             </SubMenu>
         </Menu>
     )
