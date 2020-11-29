@@ -13,8 +13,8 @@ i18n.use(initReactI18next) // passes i18n down to react-i18next
                 translation: vi,
             },
         },
-        lng: localStorage.getItem("locale") ? localStorage.getItem("locale") :  "vi",
-        fallbackLng: localStorage.getItem("locale") ? localStorage.getItem("locale") : "vi",
+        lng: localStorage.getItem("lang") ? localStorage.getItem("lang") :  "vi",
+        fallbackLng: localStorage.getItem("lang") ? localStorage.getItem("lang") : "vi",
 
         interpolation: {
             escapeValue: false,

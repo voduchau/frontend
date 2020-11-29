@@ -1,6 +1,7 @@
-import React, { useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Avatar } from 'antd';
 import avatar from '../../../assets/images/avatar.png';
+import Media from 'react-media';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
@@ -10,7 +11,6 @@ import "antd/dist/antd.css";
 import { Badge } from 'antd';
 import us from '../../../assets/images/us.png'
 import vietnam from '../../../assets/images/vietnam.png'
-import korea from '../../../assets/images/korea.png'
 import { useTranslation } from 'react-i18next';
 
 const { SubMenu } = Menu;
@@ -25,9 +25,31 @@ const Header = (props) => {
     const [currentLanguage, setCurrentLanguage] = useState("vi");
     const [currentLanguageSrc, setCurrentLanguageSrc] = useState(vietnam)
 
+    const {
+        history,
+        collapsed,
+        toggle,
+        showDrawer,
+        matches
+    } = props;
+
+    useEffect(() => {
+        if (localStorage.getItem("lang")) {
+            const lang = localStorage.getItem("lang");
+            setCurrentLanguage(lang)
+            if(lang == "en"){
+                setCurrentLanguageSrc(us)
+            }
+            else {
+                setCurrentLanguageSrc(vietnam)
+            }
+        }
+    }, [])
+
     const handleChangeLanguage = (e) => {
         setCurrentLanguage(e.key);
         i18n.changeLanguage(e.key);
+        localStorage.setItem("lang", e.key)
         if (e.key == "en") {
             setCurrentLanguageSrc(us)
         }
@@ -40,7 +62,7 @@ const Header = (props) => {
     const handleSignOut = (e) => {
         e.preventDefault();
         localStorage.removeItem("token");
-        props.history.replace("/login");
+        history.replace("/login");
     }
 
     const rightContent = [
@@ -106,15 +128,40 @@ const Header = (props) => {
         <Layout.Header
             className="header-container"
         >
-            <div>
-                {React.createElement(props.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                    className: "trigger",
-                    onClick: props.toggle,
-                })}
-            </div>
-            <div className="header-menu-right">
-                {rightContent}
-            </div>
+            <Media
+                query="(min-width: 992px)"
+                render={() =>
+                    (
+                        <div className="large-header">
+                            <div>
+                                {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                                    className: "trigger",
+                                    onClick: toggle,
+                                })}
+                            </div>
+                            <div className="header-menu-right">
+                                {rightContent}
+                            </div>
+                        </div>
+                    )}
+            />
+            <Media
+                query="(max-width: 991px)"
+                render={() =>
+                    (
+                        <div className="small-header">
+                            <div className="btn-collap-menu">
+                                {React.createElement(props.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                                    className: "trigger",
+                                    onClick: matches.small ? showDrawer : toggle,
+                                })}
+                            </div>
+                            <div className="header-menu-right ml-5">
+                                {rightContent}
+                            </div>
+                        </div>
+                    )}
+            />
         </Layout.Header>
     );
 }

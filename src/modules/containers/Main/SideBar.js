@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Switch } from 'antd';
+import Media, { useMedia } from 'react-media';
 import {
     HomeOutlined,
     BulbOutlined,
@@ -20,27 +21,24 @@ const SideBar = (props) => {
         theme,
         collapsed,
         changeTheme,
+        matches,
         setCollapsed,
-        matches
+        collapsedWidth
     } = props;
-
-    console.log(location.pathname, 'props')
 
     return (
         <Sider
-            width={256}
-            breakpoint="lg"
+            width={210}
+            breakpoint="md"
             trigger={null}
             theme={theme}
+            // collapsedWidth={matches.small ? collapsedWidth && collapsedWidth}
             onBreakpoint={broken => {
                 setCollapsed(broken)
             }}
-            onCollapse={(collapsed, type) => {
-                console.log(collapsed, type);
-            }}
             className="antd-sider-container"
             collapsible
-            collapsed={collapsed}
+            collapsed={matches.small ? false : collapsed}
         >
             <div className="logo-sidebar">
                 <img src={logo} alt="logo-sider" />
@@ -68,8 +66,15 @@ const SideBar = (props) => {
                 </Menu.SubMenu>
             </Menu>
             <div className="swithTheme">
-                <BulbOutlined />
-                <span>Swith theme</span>
+                {
+                    !collapsed ?
+                        <>
+                            <BulbOutlined />
+                            <span>Swith theme</span>
+                        </>
+                        : null
+
+                }
                 <Switch
                     checked={theme === 'dark'}
                     onChange={changeTheme}

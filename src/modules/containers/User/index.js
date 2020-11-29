@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, Button, Tooltip, Popconfirm, message } from 'antd';
+import { Table, Input, Button, Tooltip, Popconfirm, message, Modal } from 'antd';
 import api from '@api';
 import {
     PlusOutlined,
@@ -8,47 +8,28 @@ import {
     EditTwoTone
 } from '@ant-design/icons';
 import './index.css';
+import ModalView from './ModalView';
+import { useTranslation } from 'react-i18next';
 
 const { Search } = Input;
 const { Column, ColumnGroup } = Table;
 
-// const data = [
-//     {
-//         key: '1',
-//         name: 'Joe',
-//         phone: "0941010197",
-//         age: 32,
-//         address: 'New York No. 1 Lake Park',
-//         tags: ['nice', 'developer'],
-//     },
-//     {
-//         key: '2',
-//         name: 'Jim',
-//         phone: "0968321456",
-//         age: 42,
-//         address: 'London No. 1 Lake Park',
-//         tags: ['loser'],
-//     },
-//     {
-//         key: '3',
-//         name: 'Joe',
-//         phone: "0963412569",
-//         age: 32,
-//         address: 'Sidney No. 1 Lake Park',
-//         tags: ['cool', 'teacher'],
-//     },
-// ];
-
-
 const User = () => {
+    const { t, i18n } = useTranslation();
+
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false)
+    const [userSelected, setUserSelected] = useState({});
+    const [loading, setLoading] = useState(false);
+    
+    //modal
+    const [visibleModal, setVisibleModal] = useState(false);
 
     const columns = [
         {
-            title: 'Name',
+            title: t("name"),
             dataIndex: 'name',
             align: 'center',
+            fixed: 'left',
             filters: [
                 {
                     text: 'Joe',
@@ -65,20 +46,35 @@ const User = () => {
             sortDirections: ['descend'],
         },
         {
-            title: 'Phone',
+            title: t("phone"),
             dataIndex: 'phone',
             align: 'center',
             defaultSortOrder: 'descend',
         },
         {
-            title: 'Age',
+            title: t("age"),
             dataIndex: 'age',
             align: 'center',
             defaultSortOrder: 'descend',
             sorter: (a, b) => a.age - b.age,
         },
         {
-            title: 'Address',
+            title: t("username"),
+            dataIndex: 'username',
+            align: 'center',
+        },
+        {
+            title: t("role"),
+            dataIndex: 'role',
+            align: 'center',
+        },
+        {
+            title: t("gender"),
+            dataIndex: 'gender',
+            align: 'center',
+        },
+        {
+            title: t("address"),
             dataIndex: 'address',
             align: 'center',
             filters: [
@@ -96,28 +92,38 @@ const User = () => {
             sortDirections: ['descend', 'ascend'],
         },
         {
-            title: 'Action',
+            title: t("action"),
             align: 'center',
             dataIndex: '',
             key: 'x',
-            render: () => (
+            fixed: 'right',
+            render: (record) => (
                 <div className="user-action">
-                    <Tooltip placement="top" title={"Delete"}>
+                    <Tooltip placement="top" title={t("delete")}>
                         <Popconfirm
-                            title="Bạn có chắc chắn muốn xóa?"
+                            title={t("confirm_delete")}
                             onConfirm={confirm}
                             onCancel={cancel}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={t("yes")}
+                            cancelText={t("no")}
                         >
                             <Button shape="circle" icon={<DeleteTwoTone twoToneColor="red" />} size="small" />
                         </Popconfirm>
                     </Tooltip>
-                    <Tooltip placement="top" title={"View"}>
-                        <Button shape="circle" icon={<EyeTwoTone twoToneColor="green" />} size="small" />
+                    <Tooltip placement="top" title={t("view")}>
+                        <Button 
+                            shape="circle" 
+                            onClick={() => handleViewUser(record)}
+                            icon={<EyeTwoTone twoToneColor="green" />} 
+                            size="small" 
+                        />
                     </Tooltip>
-                    <Tooltip placement="top" title={"Edit"}>
-                        <Button shape="circle" icon={<EditTwoTone />} size="small" />
+                    <Tooltip placement="top" title={t("edit")}>
+                        <Button 
+                            shape="circle" 
+                            icon={<EditTwoTone />} 
+                            size="small" 
+                        />
                     </Tooltip>
                 </div>
             ),
@@ -129,7 +135,6 @@ const User = () => {
     },[])
 
     const fetchData = () => {
-        console.log('fetch')
         setLoading(true)
         api.get('/users').then((res) => {
             setData(res.data)
@@ -137,12 +142,11 @@ const User = () => {
         })
     }
 
-    const handleAddUser = () => {
-        api.get('/users', {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        }).then((response) => {
-            console.log(response,'response')
-        })
+    const handleAddUser = () => {}
+
+    const handleViewUser = (record) => {
+        setVisibleModal(true);
+        setUserSelected(record)
     }
 
     const onChangeTable = (pagination, filters, sorter, extra) => {
@@ -166,7 +170,7 @@ const User = () => {
         <div className="user-content">
             <div className="user-content-header">
                 <Search
-                    placeholder="Tìm kiếm"
+                    placeholder={t("search")}
                     maxLength={30}
                     className="input-search-user"
                     allowClear
@@ -185,6 +189,13 @@ const User = () => {
                 dataSource={data}
                 onChange={onChangeTable}
                 className="table-user-container"
+                scroll={{ x: 800}}
+            />
+            <ModalView 
+                visibleModal={visibleModal} 
+                setVisibleModal={setVisibleModal} 
+                userSelected={userSelected}
+                t={t}
             />
         </div>
     );

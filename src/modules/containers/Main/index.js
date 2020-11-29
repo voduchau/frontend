@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Spin } from 'antd';
+import { Layout, Spin, Drawer } from 'antd';
 import {
     LoadingOutlined
 } from '@ant-design/icons';
@@ -27,36 +27,68 @@ const App = (props) => {
     const [loading, setLoading] = useState(false)
     const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
 
+    //drawer
+    const [visible, setVisible] = useState(false);
+
+    const showDrawer = () => {
+        console.log('show drawer')
+        setVisible(true)
+    }
+
     const toggle = () => {
         setCollapsed(!collapsed);
     };
-
-    useEffect(() => {
-        // setTimeout(()=>{
-        //     setLoading(false)
-        // }, 1500)
-    },[])
 
     const changeTheme = () => {
         setTheme(theme == "dark" ? "light" : "dark");
     }
 
+    const onCloseDrawer = () => {
+        setVisible(false)
+    }
+
     return (
         <Layout>
             <Spin spinning={loading} indicator={antIcon}>
-                <SideBar 
-                    matches={matches} 
-                    toggle={toggle} 
-                    theme={theme} 
-                    setCollapsed={setCollapsed} 
-                    changeTheme={changeTheme} 
-                    collapsed={collapsed} 
-                />
+                {
+                    matches.small ?
+                        <Drawer
+                            // title="Basic Drawer"
+                            placement="left"
+                            closable={false}
+                            onClose={onCloseDrawer}
+                            visible={visible}
+                            className="drawer-sider-container"
+                            key="left"
+                            width={188}
+                        >
+                            <SideBar
+                                matches={matches}
+                                toggle={toggle}
+                                theme={theme}
+                                collapsedWidth={2}
+                                setCollapsed={setCollapsed}
+                                changeTheme={changeTheme}
+                                collapsed={collapsed}
+                            />
+                        </Drawer>
+                        :
+                        <SideBar
+                            matches={matches}
+                            toggle={toggle}
+                            theme={theme}
+                            setCollapsed={setCollapsed}
+                            changeTheme={changeTheme}
+                            collapsed={collapsed}
+                        />
+                }
+
                 <Layout className="site-layout ant-layout-container">
-                    <Header 
-                        matches={matches} 
-                        collapsed={collapsed} 
+                    <Header
+                        matches={matches}
+                        collapsed={collapsed}
                         toggle={toggle}
+                        showDrawer={showDrawer}
                         {...props}
                     />
                     <Content
@@ -77,7 +109,7 @@ const App = (props) => {
                                 />
                             ))}
                         </div>
-                </Content>
+                    </Content>
                     <Footer />
                 </Layout>
             </Spin>
