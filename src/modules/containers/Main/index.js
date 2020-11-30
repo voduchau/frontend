@@ -83,7 +83,7 @@ const App = (props) => {
                         />
                 }
 
-                <div className="site-layout ant-layout-container">
+                <div className={`site-layout ant-layout-container ${!matches.small ? "ant-layout-container": ""}`}>
                     <Header
                         matches={matches}
                         collapsed={collapsed}

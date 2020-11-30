@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { login_pending, login_success, login_error } from '@actions/auth';
 import { useTranslation } from 'react-i18next';
 import api from "@api"
+import { LoginApi } from '@api/AuthApi';
 import "antd/dist/antd.css";
 import './index.css'
 import logo from '../../../assets/images/logo.png'
@@ -21,7 +22,7 @@ const Login = (props) => {
         setLoading(true);
         dispatch(login_pending())
 
-        api.post('/user/login', {
+        LoginApi({
             username: values.username,
             password: values.password,
         }).then(res => {
@@ -29,7 +30,7 @@ const Login = (props) => {
                 setLoading(false)
                 dispatch(login_success(res.data))
                 props.history.replace('/home');
-                message.success( t("welcome") + " " + res.data.username);
+                message.success(t("welcome") + " " + res.data.username);
             }
         }).catch(err => {
             if (err) {
@@ -44,6 +45,29 @@ const Login = (props) => {
                 });
             }
         })
+        // api.post('/user/login', {
+        //     username: values.username,
+        //     password: values.password,
+        // }).then(res => {
+        //     if (res.status === 200) {
+        //         setLoading(false)
+        //         dispatch(login_success(res.data))
+        //         props.history.replace('/home');
+        //         message.success( t("welcome") + " " + res.data.username);
+        //     }
+        // }).catch(err => {
+        //     if (err) {
+        //         setLoading(false)
+        //         dispatch(login_error("login failed"))
+        //         message.error({
+        //             content: 'Login failed',
+        //             className: 'custom-class',
+        //             style: {
+        //                 marginTop: '15vh',
+        //             },
+        //         });
+        //     }
+        // })
 
         form.validateFields().then(value => {
             console.log(value)

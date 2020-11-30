@@ -126,7 +126,7 @@ const Header = (props) => {
 
     return (
         <Layout.Header
-            className={`header-container ${collapsed ? "header-collapse-1" : ""}`}
+            className={`header-container ${!matches.small ? "ant-layout-header-width": "ant-header-full"} ${collapsed && !matches.small? "header-collapse-1" : ""}`}
         >
             <Media
                 query="(min-width: 992px)"

@@ -187,7 +187,7 @@ const User = () => {
                     className="input-search-user"
                     allowClear
                     onSearch={handleSearchUser}
-                    style={{ width: 200 }}
+                    // style={{ width: 200 }}
                 />
                 <Button type="primary" size="medium" onClick={handleAddUser}>
                     Thêm mới

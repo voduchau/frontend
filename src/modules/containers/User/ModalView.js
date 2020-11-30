@@ -20,7 +20,6 @@ const ModalView = (props) => {
     const buttonItemLayout = {
         wrapperCol: { span: 14, offset: 4 },
     }
-    console.log(userSelected,'userSelected')
     
     return (
         <Modal

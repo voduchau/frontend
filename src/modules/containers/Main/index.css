@@ -67,8 +67,14 @@
   top: 0;
   right: 0;
   height: 72px;
-  width: calc(100% - 210px);
+  /* width: calc(100% - 210px); */
   transition: width 0.2s;
+}
+.ant-layout-header-width {
+  width: calc(100% - 210px);
+}
+.ant-header-full {
+  width: 100%;
 }
 .ant-layout .menu-bar {
   text-align: right;
@@ -81,10 +87,14 @@
   height: 100vh;
   -ms-flex: 1 1;
   flex: 1 1;
-  width: calc(100% - 256px);
+  /* width: calc(100% - 256px); */
   overflow-y: scroll;
   overflow-x: hidden;
 }
+.ant-layout-container-width {
+  width: calc(100% - 256px);
+}
+
 .swithTheme {
 }
 .ant-layout-sider-children {
