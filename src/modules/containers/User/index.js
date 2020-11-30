@@ -20,6 +20,8 @@ const User = () => {
     const [data, setData] = useState([]);
     const [userSelected, setUserSelected] = useState({});
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
+    const [pagination, setpagination] = useState({current: 1, pageSize: 8});
     
     //modal
     const [visibleModal, setVisibleModal] = useState(false);
@@ -135,7 +137,7 @@ const User = () => {
     },[])
 
     const fetchData = () => {
-        setLoading(true)
+        setLoading(true);
         api.get('/users').then((res) => {
             setData(res.data)
             setLoading(false)
@@ -151,10 +153,20 @@ const User = () => {
 
     const onChangeTable = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
+        setpagination(pagination.current)
     }
 
-    const onSearch = e => {
-        console.log(e);
+    const handleSearchUser = e => {
+        setLoading(true);
+        setSearch(e)
+        api.get('/users/search',{
+            params: { 
+                search: e
+            }
+        }).then((res) => {
+            setData(res.data)
+            setLoading(false)
+        })
     };
 
     const confirm = (e) => {
@@ -167,14 +179,14 @@ const User = () => {
         message.error('Click on No');
     }
     return (
-        <div className="user-content">
+        <>
             <div className="user-content-header">
                 <Search
                     placeholder={t("search")}
                     maxLength={30}
                     className="input-search-user"
                     allowClear
-                    onSearch={onSearch}
+                    onSearch={handleSearchUser}
                     style={{ width: 200 }}
                 />
                 <Button type="primary" size="medium" onClick={handleAddUser}>
@@ -183,13 +195,15 @@ const User = () => {
             </div>
             <Table
                 bordered
+                rowKey={record => record.key}
                 dataSource={data}
                 columns={columns}
+                pagination={pagination}
                 loading={loading}
                 dataSource={data}
                 onChange={onChangeTable}
                 className="table-user-container"
-                scroll={{ x: 800}}
+                scroll={{ x: 800, y: document.body.offsetHeight - 250}}
             />
             <ModalView 
                 visibleModal={visibleModal} 
@@ -197,7 +211,7 @@ const User = () => {
                 userSelected={userSelected}
                 t={t}
             />
-        </div>
+        </>
     );
 }
 

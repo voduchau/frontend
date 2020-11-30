@@ -49,7 +49,7 @@ const App = (props) => {
 
     return (
         <Layout>
-            <Spin spinning={loading} indicator={antIcon}>
+            {/* <Spin spinning={loading} indicator={antIcon}> */}
                 {
                     matches.small ?
                         <Drawer
@@ -83,7 +83,7 @@ const App = (props) => {
                         />
                 }
 
-                <Layout className="site-layout ant-layout-container">
+                <div className="site-layout ant-layout-container">
                     <Header
                         matches={matches}
                         collapsed={collapsed}
@@ -93,13 +93,13 @@ const App = (props) => {
                     />
                     <Content
                         className="site-layout-background"
-                        style={{
-                            margin: '24px 16px',
-                            padding: 24,
-                            minHeight: 280,
-                        }}
+                        // style={{
+                        //     margin: '24px 16px',
+                        //     padding: 24,
+                        //     minHeight: 280,
+                        // }}
                     >
-                        <div style={{ minHeight: 360 }}>
+                        <div className="content-container">
                             {childRoutes.map((route, index) => (
                                 <Route
                                     key={index}
@@ -111,8 +111,8 @@ const App = (props) => {
                         </div>
                     </Content>
                     <Footer />
-                </Layout>
-            </Spin>
+                </div>
+            {/* </Spin> */}
         </Layout>
     );
 }
