@@ -9,22 +9,24 @@ import {
 } from '@ant-design/icons';
 import './index.css';
 import ModalView from './ModalView';
+import QueryMedia from '@utils/queryMedia';
 import { useTranslation } from 'react-i18next';
-
+import { Delete } from '@api/UserApi';
 const { Search } = Input;
 const { Column, ColumnGroup } = Table;
 
 const User = () => {
+    const matches = QueryMedia()
     const { t, i18n } = useTranslation();
 
     const [data, setData] = useState([]);
     const [userSelected, setUserSelected] = useState({});
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
-    const [pagination, setpagination] = useState({current: 1, pageSize: 8});
-    
+    const [pagination, setpagination] = useState({ current: 1, pageSize: 8 });
+
     //modal
-    const [visibleModal, setVisibleModal] = useState(false);
+    const [visibleModalView, setVisibleModalView] = useState(false);
 
     const columns = [
         {
@@ -104,27 +106,33 @@ const User = () => {
                     <Tooltip placement="top" title={t("delete")}>
                         <Popconfirm
                             title={t("confirm_delete")}
-                            onConfirm={confirm}
+                            onConfirm={() => confirmDelete(record)}
                             onCancel={cancel}
                             okText={t("yes")}
                             cancelText={t("no")}
                         >
-                            <Button shape="circle" icon={<DeleteTwoTone twoToneColor="red" />} size="small" />
+                            <Button
+                                shape="circle"
+                                onClick={() => handleDeleteUser(record)}
+                                icon={<DeleteTwoTone twoToneColor="red" />}
+                                size="small"
+                            />
                         </Popconfirm>
                     </Tooltip>
                     <Tooltip placement="top" title={t("view")}>
-                        <Button 
-                            shape="circle" 
+                        <Button
+                            shape="circle"
                             onClick={() => handleViewUser(record)}
-                            icon={<EyeTwoTone twoToneColor="green" />} 
-                            size="small" 
+                            icon={<EyeTwoTone twoToneColor="green" />}
+                            size="small"
                         />
                     </Tooltip>
                     <Tooltip placement="top" title={t("edit")}>
-                        <Button 
-                            shape="circle" 
-                            icon={<EditTwoTone />} 
-                            size="small" 
+                        <Button
+                            shape="circle"
+                            onClick={() => handleEditUser(record)}
+                            icon={<EditTwoTone />}
+                            size="small"
                         />
                     </Tooltip>
                 </div>
@@ -132,9 +140,9 @@ const User = () => {
         }
     ];
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchData()
-    },[])
+    }, [])
 
     const fetchData = () => {
         setLoading(true);
@@ -144,11 +152,30 @@ const User = () => {
         })
     }
 
-    const handleAddUser = () => {}
+    const handleAddUser = () => { }
 
     const handleViewUser = (record) => {
-        setVisibleModal(true);
+        setVisibleModalView(true);
         setUserSelected(record)
+    }
+
+    const handleDeleteUser = (record) => {
+        setUserSelected(record)
+    }
+
+    const confirmDelete = (record) => {
+        setLoading(true)
+        Delete(record.key).then((res) => {
+            if(res.status === 200) {
+                setLoading(false)
+                fetchData()
+            }
+        })
+        message.success(t("delete_success"));
+    }
+
+    const handleEditUser = (record) => {
+
     }
 
     const onChangeTable = (pagination, filters, sorter, extra) => {
@@ -159,8 +186,8 @@ const User = () => {
     const handleSearchUser = e => {
         setLoading(true);
         setSearch(e)
-        api.get('/users/search',{
-            params: { 
+        api.get('/users/search', {
+            params: {
                 search: e
             }
         }).then((res) => {
@@ -169,25 +196,20 @@ const User = () => {
         })
     };
 
-    const confirm = (e) => {
-        console.log(e);
-        message.success('Click on Yes');
-    }
-
     const cancel = (e) => {
         console.log(e);
         message.error('Click on No');
     }
     return (
         <>
-            <div className="user-content-header">
+            <div className={`user-content-header ${matches.small ? "flex-column" : ""}`}>
                 <Search
                     placeholder={t("search")}
                     maxLength={30}
-                    className="input-search-user"
+                    className={`input-search-user ${matches.small ? "input-search-full" : "input-search-200"}`}
                     allowClear
                     onSearch={handleSearchUser}
-                    // style={{ width: 200 }}
+                // style={{ width: 200 }}
                 />
                 <Button type="primary" size="medium" onClick={handleAddUser}>
                     Thêm mới
@@ -203,11 +225,11 @@ const User = () => {
                 dataSource={data}
                 onChange={onChangeTable}
                 className="table-user-container"
-                scroll={{ x: 800, y: document.body.offsetHeight - 250}}
+                scroll={{ x: 800, y: document.body.offsetHeight - 250 }}
             />
-            <ModalView 
-                visibleModal={visibleModal} 
-                setVisibleModal={setVisibleModal} 
+            <ModalView
+                visibleModal={visibleModalView}
+                setVisibleModal={setVisibleModalView}
                 userSelected={userSelected}
                 t={t}
             />

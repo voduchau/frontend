@@ -27,7 +27,7 @@ const ModalView = (props) => {
             visible={visibleModal}
             // onOk={handleOk}
             className="modal-user-detail"
-            // onCancel={handleCancel}
+            onCancel={handleCancel}
             footer={[
                 <Button key="back" onClick={handleCancel}>
                     {t("cancel")}

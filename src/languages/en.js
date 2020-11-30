@@ -23,5 +23,6 @@ export default {
     "no": "No",
     "information_user": "Information User",
     "cancel": "Cancel",
-    "language": "Language"
+    "language": "Language",
+    "delete_success": "delete success!"
 };

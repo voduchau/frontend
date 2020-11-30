@@ -23,5 +23,6 @@ export default {
     "no": "Không",
     "information_user": "Thông tin người dùng",
     "cancel": "Đóng",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "delete_success": "Xóa thành công!"
 };

@@ -28,3 +28,13 @@
 .modal-user-detail .ant-form-item-label{
     width: 20%;
 }
+.input-search-200 {
+    width: 200px !important;
+}
+.input-search-full {
+    width: 100% !important;
+}
+.flex-column {
+    flex-direction: column !important;
+    align-items: inherit !important;
+}
